@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "729917333165",
+    "project_id": "event-booking-bae05",
+    "storage_bucket": "event-booking-bae05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729917333165:android:4bc0e4447fe8866dd4f024",
+        "android_client_info": {
+          "package_name": "com.example.event_booking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "729917333165-oebqtg4t6i7ce3s2lnquub9nu8uhb4ku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLS0HL2v5fDigLMaCeeED0jdlKtPifOME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "729917333165-oebqtg4t6i7ce3s2lnquub9nu8uhb4ku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

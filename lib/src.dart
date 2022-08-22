@@ -1,3 +1,5 @@
+import 'package:event_booking/screens/auth_screen.dart';
+import 'package:event_booking/upload_company_screen/company_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class Src extends StatelessWidget {
@@ -5,6 +7,9 @@ class Src extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material();
+    return MaterialApp(
+      // home: AuthWidget(),
+      home: CompanyListScreen(),
+    );
   }
 }
