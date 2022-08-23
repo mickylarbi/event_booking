@@ -58,7 +58,7 @@ class EventCard extends StatelessWidget {
                 id: 'asdf',
                 title: 'Believers Conference',
                 dateTime: DateTime.now().add(const Duration(days: 15)),
-                venue: 'Great Hall'),
+                venueString: 'Great Hall'),
           ),
         );
       },

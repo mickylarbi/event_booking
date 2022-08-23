@@ -1,9 +1,11 @@
 import 'package:event_booking/models/event.dart';
+import 'package:event_booking/screens/event_screen.dart/map_screen.dart';
 import 'package:event_booking/screens/event_screen.dart/service_providers_list_screen.dart';
 import 'package:event_booking/screens/shared/custom_textformfield.dart';
 import 'package:event_booking/utils/dialogs.dart';
 import 'package:event_booking/utils/functions.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
 class EditEventScreen extends StatefulWidget {
@@ -17,7 +19,9 @@ class EditEventScreen extends StatefulWidget {
 class _EditEventScreenState extends State<EditEventScreen> {
   TextEditingController titleController = TextEditingController();
   ValueNotifier<DateTime?> dateTimeNotifier = ValueNotifier<DateTime?>(null);
-  TextEditingController venueController = TextEditingController();
+  TextEditingController venueStringController = TextEditingController();
+
+  LatLng? venueGeo;
 
   @override
   void initState() {
@@ -26,7 +30,8 @@ class _EditEventScreenState extends State<EditEventScreen> {
     if (widget.event.id != null) {
       titleController.text = widget.event.title!;
       dateTimeNotifier.value = widget.event.dateTime;
-      venueController.text = widget.event.venue!;
+      venueStringController.text = widget.event.venueString!;
+      venueGeo = widget.event.venueGeo;
     }
   }
 
@@ -135,15 +140,38 @@ class _EditEventScreenState extends State<EditEventScreen> {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: venueController,
+              controller: venueStringController,
               decoration: const InputDecoration(labelText: 'Venue'),
             ),
             const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(24),
-              color: Colors.pink.withOpacity(.1),
-              child: const Text('some google maps things go go on for here'),
-            ),
+            StatefulBuilder(builder: (context, setState) {
+              return TextButton(
+                onPressed: () async {
+                  LatLng? result = await navigate(
+                      context,
+                      MapScreen(
+                        initialSelectedPostion: venueGeo,
+                      ));
+
+                  if (result != null) {
+                    venueGeo = result;
+                  }
+                  setState(() {});
+                },
+                style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 14),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    backgroundColor: Colors.blue.withOpacity(.2)),
+                child: Text(
+                  venueGeo != null
+                      ? venueGeo.toString()
+                      : 'Choose location on google maps',
+                  style: const TextStyle(),
+                ),
+              );
+            }),
             const Divider(height: 70),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
@@ -156,7 +184,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      navigate(context, ServiceProvidersListScreen());
+                      navigate(context, const ServiceProvidersListScreen());
                     },
                     child: const Text(
                       'View service providers',
@@ -176,7 +204,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
   void dispose() {
     titleController.dispose();
     dateTimeNotifier.dispose();
-    venueController.dispose();
+    venueStringController.dispose();
 
     super.dispose();
   }
