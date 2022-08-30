@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_booking/firebase_services/firestore_service.dart';
 import 'package:event_booking/firebase_services/storage_service.dart';
@@ -15,7 +16,7 @@ class CompanyListScreen extends StatefulWidget {
 
 class _CompanyListScreenState extends State<CompanyListScreen> {
   FirestoreService db = FirestoreService();
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,38 +115,8 @@ class Company extends StatelessWidget {
                     color: Colors.grey[200],
                     height: 96,
                     width: 96,
-                    child: StatefulBuilder(builder: (context, setState) {
-                      return FutureBuilder<String>(
-                        //TODO:
-                        future: storage
-                            .serviceProviderImageReference(serviceProvider.id!)
-                            .getDownloadURL(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return Center(
-                              child: IconButton(
-                                onPressed: () {
-                                  setState(() {});
-                                },
-                                icon: const Icon(Icons.refresh),
-                              ),
-                            );
-                          }
-
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            return Image.network(
-                              snapshot.data!,
-                              fit: BoxFit.cover,
-                            );
-                          }
-
-                          return const Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          );
-                        },
-                      );
-                    }),
+                    child: CompanyImageWidget(
+                        serviceProviderId: serviceProvider.id!),
                   ),
                 ),
                 const SizedBox(width: 14),
@@ -184,5 +155,61 @@ class Company extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CompanyImageWidget extends StatelessWidget {
+  final String serviceProviderId;
+  CompanyImageWidget({
+    Key? key,
+    required this.serviceProviderId,
+  }) : super(key: key);
+
+  StorageService storage = StorageService();
+
+  @override
+  Widget build(BuildContext context) {
+    return StatefulBuilder(builder: (context, setState) {
+      return FutureBuilder<String>(
+        //TODO:
+        future: storage
+            .serviceProviderImageReference(serviceProviderId)
+            .getDownloadURL(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: IconButton(
+                onPressed: () {
+                  setState(() {});
+                },
+                icon: const Icon(Icons.refresh),
+              ),
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.done) {
+            return CachedNetworkImage(
+              imageUrl: snapshot.data!,
+              fit: BoxFit.cover,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  CircularProgressIndicator.adaptive(
+                      value: downloadProgress.progress),
+              errorWidget: (context, url, error) => Center(
+                child: IconButton(
+                  icon: const Icon(Icons.error),
+                  onPressed: () {
+                    setState(() {});
+                  },
+                ),
+              ),
+            );
+          }
+
+          return const Center(
+            child: CircularProgressIndicator.adaptive(),
+          );
+        },
+      );
+    });
   }
 }

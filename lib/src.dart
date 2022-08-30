@@ -8,8 +8,8 @@ class Src extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: AuthWidget(),
-      // home: CompanyListScreen(),
+      // home: AuthWidget(),
+      home: CompanyListScreen(),
     );
   }
 }

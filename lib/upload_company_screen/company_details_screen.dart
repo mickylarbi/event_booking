@@ -6,6 +6,7 @@ import 'package:event_booking/firebase_services/storage_service.dart';
 import 'package:event_booking/models/service.dart';
 import 'package:event_booking/models/service_provider.dart';
 import 'package:event_booking/upload_company_screen/service_details_screen.dart';
+import 'package:event_booking/utils/constants.dart';
 import 'package:event_booking/utils/dialogs.dart';
 import 'package:event_booking/utils/functions.dart';
 import 'package:flutter/material.dart';
@@ -57,132 +58,216 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
             ListView(
               padding: const EdgeInsets.fromLTRB(24, 40, 24, 88),
               children: [
-                ValueListenableBuilder<XFile?>(
-                  valueListenable: pictureNotifier,
-                  builder: (context, value, child) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (value != null)
-                          Center(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(14),
+                // ValueListenableBuilder<XFile?>(
+                //   valueListenable: pictureNotifier,
+                //   builder: (context, value, child) {
+                //     return Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         if (value != null)
+                //           Center(
+                //             child: ClipRRect(
+                //               borderRadius: BorderRadius.circular(14),
+                //               child: Image.file(
+                //                 File(value.path),
+                //                 height: 250,
+                //                 width: 250,
+                //                 fit: BoxFit.cover,
+                //               ),
+                //             ),
+                //           ),
+                //         if (value == null && widget.serviceProvider.id != null)
+                //           Center(
+                //             child: ClipRRect(
+                //               borderRadius: BorderRadius.circular(14),
+                //               child: Container(
+                //                 color: Colors.grey[200],
+                //                 height: 250,
+                //                 width: 250,
+                //                 child: StatefulBuilder(
+                //                   builder: (context, setState) {
+                //                     return FutureBuilder<String>(
+                //                       future: storage
+                //                           .serviceProviderImageReference(
+                //                               widget.serviceProvider.id!)
+                //                           .getDownloadURL(),
+                //                       builder: (context, snapshot) {
+                //                         if (snapshot.hasError) {
+                //                           return Center(
+                //                             child: IconButton(
+                //                               onPressed: () {
+                //                                 setState(() {});
+                //                               },
+                //                               icon: const Icon(Icons.refresh),
+                //                             ),
+                //                           );
+                //                         }
+
+                //                         if (snapshot.connectionState ==
+                //                             ConnectionState.done) {
+                //                           return Image.network(
+                //                             snapshot.data!,
+                //                             fit: BoxFit.cover,
+                //                           );
+                //                         }
+
+                //                         return const Center(
+                //                             child: CircularProgressIndicator
+                //                                 .adaptive());
+                //                       },
+                //                     );
+                //                   },
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //         const SizedBox(height: 20),
+                //         Center(
+                //           child: TextButton(
+                //             onPressed: () {
+                //               final ImagePicker picker = ImagePicker();
+
+                //               showCustomBottomSheet(
+                //                 context,
+                //                 [
+                //                   ListTile(
+                //                     leading: const Icon(Icons.camera_alt),
+                //                     title: const Text('Take a photo'),
+                //                     onTap: () async {
+                //                       picker
+                //                           .pickImage(source: ImageSource.camera)
+                //                           .then((value) {
+                //                         Navigator.pop(context);
+                //                         if (value != null) {
+                //                           pictureNotifier.value = value;
+                //                         }
+                //                       }).onError((error, stackTrace) {
+                //                         Navigator.pop(context);
+                //                         showAlertDialog(context);
+                //                       });
+                //                     },
+                //                   ),
+                //                   ListTile(
+                //                     leading: const Icon(Icons.photo),
+                //                     title: const Text('Choose from gallery'),
+                //                     onTap: () async {
+                //                       picker
+                //                           .pickImage(
+                //                               source: ImageSource.gallery)
+                //                           .then((value) {
+                //                         Navigator.pop(context);
+                //                         if (value != null) {
+                //                           pictureNotifier.value = value;
+                //                         }
+                //                       }).onError((error, stackTrace) {
+                //                         showAlertDialog(context);
+                //                       });
+                //                     },
+                //                   ),
+                //                 ],
+                //               );
+                //             },
+                //             style: TextButton.styleFrom(
+                //               padding:
+                //                   const EdgeInsets.symmetric(horizontal: 14),
+                //               backgroundColor: Colors.blueGrey.withOpacity(.2),
+                //               shape: RoundedRectangleBorder(
+                //                 borderRadius: BorderRadius.circular(10),
+                //               ),
+                //             ),
+                //             child: Text(value == null
+                //                 ? 'Choose photo'
+                //                 : 'Change photo'),
+                //           ),
+                //         ),
+                //       ],
+                //     );
+                //   },
+                // ),
+                if (widget.serviceProvider.id == null)
+                  ValueListenableBuilder<XFile?>(
+                    valueListenable: pictureNotifier,
+                    builder: (context, value, _) {
+                      return Column(
+                        children: [
+                          if (value == null)
+                            const SizedBox()
+                          else
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
                               child: Image.file(
                                 File(value.path),
-                                height: 250,
-                                width: 250,
+                                height: 200,
+                                width: 200,
                                 fit: BoxFit.cover,
                               ),
                             ),
-                          ),
-                        if (value == null && widget.serviceProvider.id != null)
+                          const SizedBox(height: 20),
                           Center(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(14),
-                              child: Container(
-                                color: Colors.grey[200],
-                                height: 250,
-                                width: 250,
-                                child: StatefulBuilder(
-                                  builder: (context, setState) {
-                                    return FutureBuilder<String>(
-                                      future: storage
-                                          .serviceProviderImageReference(
-                                              widget.serviceProvider.id!)
-                                          .getDownloadURL(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasError) {
-                                          return Center(
-                                            child: IconButton(
-                                              onPressed: () {
-                                                setState(() {});
-                                              },
-                                              icon: const Icon(Icons.refresh),
-                                            ),
-                                          );
-                                        }
+                            child: TextButton(
+                              onPressed: () {
+                                final ImagePicker picker = ImagePicker();
 
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.done) {
-                                          return Image.network(
-                                            snapshot.data!,
-                                            fit: BoxFit.cover,
-                                          );
-                                        }
-
-                                        return const Center(
-                                            child: CircularProgressIndicator
-                                                .adaptive());
+                                showCustomBottomSheet(
+                                  context,
+                                  [
+                                    ListTile(
+                                      leading: const Icon(Icons.camera_alt),
+                                      title: const Text('Take a photo'),
+                                      onTap: () async {
+                                        picker
+                                            .pickImage(
+                                                source: ImageSource.camera)
+                                            .then((value) {
+                                          Navigator.pop(context);
+                                          if (value != null) {
+                                            pictureNotifier.value = value;
+                                          }
+                                        }).onError((error, stackTrace) {
+                                          Navigator.pop(context);
+                                          showAlertDialog(context);
+                                        });
                                       },
-                                    );
-                                  },
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(Icons.photo),
+                                      title: const Text('Choose from gallery'),
+                                      onTap: () async {
+                                        picker
+                                            .pickImage(
+                                                source: ImageSource.gallery)
+                                            .then((value) {
+                                          Navigator.pop(context);
+                                          if (value != null) {
+                                            pictureNotifier.value = value;
+                                          }
+                                        }).onError((error, stackTrace) {
+                                          showAlertDialog(context);
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                              style: TextButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 14),
+                                backgroundColor:
+                                    Colors.blueGrey.withOpacity(.2),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
+                              child: Text(value == null
+                                  ? 'Choose photo'
+                                  : 'Change photo'),
                             ),
                           ),
-                        const SizedBox(height: 20),
-                        Center(
-                          child: TextButton(
-                            onPressed: () {
-                              final ImagePicker picker = ImagePicker();
+                        ],
+                      );
+                    },
+                  ),
 
-                              showCustomBottomSheet(
-                                context,
-                                [
-                                  ListTile(
-                                    leading: const Icon(Icons.camera_alt),
-                                    title: const Text('Take a photo'),
-                                    onTap: () async {
-                                      picker
-                                          .pickImage(source: ImageSource.camera)
-                                          .then((value) {
-                                        Navigator.pop(context);
-                                        if (value != null) {
-                                          pictureNotifier.value = value;
-                                        }
-                                      }).onError((error, stackTrace) {
-                                        Navigator.pop(context);
-                                        showAlertDialog(context);
-                                      });
-                                    },
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(Icons.photo),
-                                    title: const Text('Choose from gallery'),
-                                    onTap: () async {
-                                      picker
-                                          .pickImage(
-                                              source: ImageSource.gallery)
-                                          .then((value) {
-                                        Navigator.pop(context);
-                                        if (value != null) {
-                                          pictureNotifier.value = value;
-                                        }
-                                      }).onError((error, stackTrace) {
-                                        showAlertDialog(context);
-                                      });
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                            style: TextButton.styleFrom(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 14),
-                              backgroundColor: Colors.blueGrey.withOpacity(.2),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            child: Text(value == null
-                                ? 'Choose photo'
-                                : 'Change photo'),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
                 const SizedBox(height: 20),
                 TextField(
                   controller: nameController,
@@ -258,6 +343,7 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
 
                           db
                               .updateServiceProvider(newServiceProvider)
+                              .timeout(ktimeout)
                               .then((val) {
                             storage
                                 .uploadServiceProviderImage(
