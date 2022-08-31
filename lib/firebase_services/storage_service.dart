@@ -18,6 +18,9 @@ class StorageService {
 
   Reference imageReference(String imageUrl) => instance.ref(imageUrl);
 
+  serviceImagesRef(String serviceId) =>
+      instance.ref('serviceImages/$serviceId/');
+
   UploadTask uploadServiceImage(XFile xFile, String serviceId) => instance
       .ref('serviceImages/$serviceId/${xFile.name}')
       .putFile(File(xFile.path));

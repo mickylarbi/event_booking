@@ -13,7 +13,7 @@ class FirestoreService {
   DocumentReference<Map<String, dynamic>> getServiceProviderFromId(String id) =>
       serviceProviderCollection.doc(id);
 
-  Future<DocumentReference<Map<String, dynamic>>> uploadServiceProvider(
+  Future<DocumentReference<Map<String, dynamic>>> addServiceProvider(
           ServiceProvider serviceProvider) =>
       serviceProviderCollection.add(serviceProvider.toMap());
 
@@ -22,21 +22,27 @@ class FirestoreService {
           .doc(serviceProvider.id)
           .update(serviceProvider.toMap());
 
+  Future<void> deleteServiceProvider(String serviceProviderId) =>
+      serviceProviderCollection.doc(serviceProviderId).delete();
+
   //SERVICES
 
   CollectionReference<Map<String, dynamic>> get serviceCollection =>
       instance.collection('services');
 
-       Query<Map<String, dynamic>>  serviceCollectionFromProvider(String providerId) =>
-      instance.collection('services').where('providerId',isEqualTo: providerId);
+  Query<Map<String, dynamic>> serviceCollectionFromProvider(
+          String providerId) =>
+      serviceCollection.where('providerId', isEqualTo: providerId);
 
   DocumentReference<Map<String, dynamic>> getServiceFromId(String id) =>
       serviceCollection.doc(id);
 
-  Future<DocumentReference<Map<String, dynamic>>> uploadService(
-          Service service) =>
+  Future<DocumentReference<Map<String, dynamic>>> addService(Service service) =>
       serviceCollection.add(service.toMap());
 
   Future<void> updateService(Service service) =>
       serviceCollection.doc(service.id).update(service.toMap());
+
+  Future<void> deleteService(String serviceId) =>
+      serviceCollection.doc(serviceId).delete();
 }

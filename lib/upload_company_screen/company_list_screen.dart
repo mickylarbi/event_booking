@@ -5,6 +5,7 @@ import 'package:event_booking/firebase_services/storage_service.dart';
 import 'package:event_booking/models/service_provider.dart';
 import 'package:event_booking/upload_company_screen/company_details_screen.dart';
 import 'package:event_booking/utils/functions.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class CompanyListScreen extends StatefulWidget {
@@ -97,60 +98,51 @@ class Company extends StatelessWidget {
         navigate(
             context, CompanyDetailsScreen(serviceProvider: serviceProvider));
       },
-      child: SizedBox(
-        height: 140,
-        child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          elevation: 10,
-          shadowColor: Colors.grey[50],
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(14),
-                  child: Container(
-                    color: Colors.grey[200],
-                    height: 96,
-                    width: 96,
-                    child: CompanyImageWidget(
-                        serviceProviderId: serviceProvider.id!),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        elevation: 10,
+        shadowColor: Colors.grey[50],
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CompanyImageWidget(
+                serviceProviderId: serviceProvider.id!,
+                height: 90,
+                width: 90,
+              ),
+              const SizedBox(width: 14),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    serviceProvider.name!,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ),
-                const SizedBox(width: 14),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      serviceProvider.name!,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(serviceProvider.motto!),
-                    // Row(
-                    //   children: [
-                    //     const Icon(
-                    //       Icons.star,
-                    //       // color: Color.fromARGB(80, 252, 228, 6),
-                    //       color: Colors.yellow, size: 18,
-                    //     ),
-                    //     Text(calculateRating(serviceProvider.reviews)
-                    //         .toStringAsFixed(2)),
-                    //     const SizedBox(width: 10),
-                    //     Text(
-                    //       serviceProvider.reviews == null
-                    //           ? 'No reviews yet'
-                    //           : '(${serviceProvider.reviews!.length} reviews)',
-                    //       style: const TextStyle(color: Colors.grey),
-                    //     ),
-                    //   ],
-                    // ),
-                  ],
-                ),
-              ],
-            ),
+                  Text(serviceProvider.motto!),
+                  // Row(
+                  //   children: [
+                  //     const Icon(
+                  //       Icons.star,
+                  //       // color: Color.fromARGB(80, 252, 228, 6),
+                  //       color: Colors.yellow, size: 18,
+                  //     ),
+                  //     Text(calculateRating(serviceProvider.reviews)
+                  //         .toStringAsFixed(2)),
+                  //     const SizedBox(width: 10),
+                  //     Text(
+                  //       serviceProvider.reviews == null
+                  //           ? 'No reviews yet'
+                  //           : '(${serviceProvider.reviews!.length} reviews)',
+                  //       style: const TextStyle(color: Colors.grey),
+                  //     ),
+                  //   ],
+                  // ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -160,9 +152,13 @@ class Company extends StatelessWidget {
 
 class CompanyImageWidget extends StatelessWidget {
   final String serviceProviderId;
+  final double? height;
+  final double? width;
   CompanyImageWidget({
     Key? key,
     required this.serviceProviderId,
+    this.height,
+    this.width,
   }) : super(key: key);
 
   StorageService storage = StorageService();
@@ -177,36 +173,57 @@ class CompanyImageWidget extends StatelessWidget {
             .getDownloadURL(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(
-              child: IconButton(
-                onPressed: () {
-                  setState(() {});
-                },
-                icon: const Icon(Icons.refresh),
-              ),
+            FirebaseException? storageException =
+                snapshot.error is FirebaseException
+                    ? snapshot.error as FirebaseException
+                    : null;
+
+            return SizedBox(
+              height: height,
+              width: width,
+              child: storageException != null &&
+                      storageException.code == 'object-not-found'
+                  ? null
+                  : Center(
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {});
+                        },
+                        icon: const Icon(Icons.refresh),
+                      ),
+                    ),
             );
           }
 
           if (snapshot.connectionState == ConnectionState.done) {
-            return CachedNetworkImage(
-              imageUrl: snapshot.data!,
-              fit: BoxFit.cover,
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator.adaptive(
-                      value: downloadProgress.progress),
-              errorWidget: (context, url, error) => Center(
-                child: IconButton(
-                  icon: const Icon(Icons.error),
-                  onPressed: () {
-                    setState(() {});
-                  },
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(14),
+              child: CachedNetworkImage(
+                imageUrl: snapshot.data!,
+                fit: BoxFit.cover,
+                height: height,
+                width: width,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator.adaptive(
+                        value: downloadProgress.progress),
+                errorWidget: (context, url, error) => Center(
+                  child: IconButton(
+                    icon: const Icon(Icons.error),
+                    onPressed: () {
+                      setState(() {});
+                    },
+                  ),
                 ),
               ),
             );
           }
 
-          return const Center(
-            child: CircularProgressIndicator.adaptive(),
+          return SizedBox(
+            height: height,
+            width: width,
+            child: const Center(
+              child: CircularProgressIndicator.adaptive(),
+            ),
           );
         },
       );
