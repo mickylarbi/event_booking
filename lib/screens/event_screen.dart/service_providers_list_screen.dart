@@ -6,7 +6,9 @@ import 'package:event_booking/utils/functions.dart';
 import 'package:flutter/material.dart';
 
 class ServiceProvidersListScreen extends StatefulWidget {
-  const ServiceProvidersListScreen({Key? key}) : super(key: key);
+  final int pagesToPop;
+  const ServiceProvidersListScreen({Key? key, required this.pagesToPop})
+      : super(key: key);
 
   @override
   State<ServiceProvidersListScreen> createState() =>
@@ -45,70 +47,64 @@ class ServiceProviderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        navigate(context,
-            ServiceProviderDetailsScreen(serviceProvider: serviceProvider));
-      },
-      child: Container(
-        alignment: Alignment.center,
-        height: 140,
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(.08),
-              blurRadius: 30,
-              offset: const Offset(0, 14),
+    return Container(
+      alignment: Alignment.center,
+      height: 140,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(.08),
+            blurRadius: 30,
+            offset: const Offset(0, 14),
+          ),
+        ],
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14),
+            child: Image.asset(
+              'assets/images/rob-simmons-Qfsgxw-ZWR0-unsplash.jpg',
+              fit: BoxFit.cover,
+              height: 96,
+              width: 96,
             ),
-          ],
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(14),
-              child: Image.asset(
-                'assets/images/rob-simmons-Qfsgxw-ZWR0-unsplash.jpg',
-                fit: BoxFit.cover,
-                height: 96,
-                width: 96,
+          ),
+          const SizedBox(width: 14),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                serviceProvider.name!,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(width: 14),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(
-                  serviceProvider.name!,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(serviceProvider.motto!),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.star,
-                      // color: Color.fromARGB(80, 252, 228, 6),
-                      color: Colors.yellow, size: 18,
-                    ),
-                    Text(calculateRating(serviceProvider.reviews)
-                        .toStringAsFixed(2)),
-                    const SizedBox(width: 10),
-                    Text(
-                      serviceProvider.reviews == null
-                          ? 'No reviews yet'
-                          : '(${serviceProvider.reviews!.length} reviews)',
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
+              Text(serviceProvider.motto!),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.star,
+                    // color: Color.fromARGB(80, 252, 228, 6),
+                    color: Colors.yellow, size: 18,
+                  ),
+                  Text(calculateRating(serviceProvider.reviews)
+                      .toStringAsFixed(2)),
+                  const SizedBox(width: 10),
+                  Text(
+                    serviceProvider.reviews == null
+                        ? 'No reviews yet'
+                        : '(${serviceProvider.reviews!.length} reviews)',
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

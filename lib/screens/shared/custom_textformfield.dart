@@ -72,13 +72,6 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
             decoration: InputDecoration(
                 hintText: widget.hintText,
                 hintStyle: const TextStyle(color: Colors.grey),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                filled: true,
-                fillColor: const Color(0xFFE4E4E4),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(14),
-                    borderSide: BorderSide.none),
                 suffixIcon: IconButton(
                     icon: Icon(value ? Icons.visibility_off : Icons.visibility),
                     onPressed: () {

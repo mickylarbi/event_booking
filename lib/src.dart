@@ -1,4 +1,6 @@
+import 'package:event_booking/models/event.dart';
 import 'package:event_booking/screens/auth_screen.dart';
+import 'package:event_booking/screens/event_screen.dart/edit_event_screen.dart';
 import 'package:event_booking/upload_company_screen/company_list_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -8,8 +10,13 @@ class Src extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // home: AuthWidget(),
-      home: CompanyListScreen(),
+      home: AuthWidget(),
+      // home: CompanyListScreen(),
+      themeMode: ThemeMode.dark,
+      darkTheme: ThemeData.dark(),
+      routes: {
+        '/edit_event_screen': (context) => EditEventScreen(event: Event())
+      },//TODO: check up on this
     );
   }
 }

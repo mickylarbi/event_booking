@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_booking/models/event.dart';
 import 'package:event_booking/models/service.dart';
 import 'package:event_booking/models/service_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FirestoreService {
   FirebaseFirestore instance = FirebaseFirestore.instance;
@@ -45,4 +47,21 @@ class FirestoreService {
 
   Future<void> deleteService(String serviceId) =>
       serviceCollection.doc(serviceId).delete();
+
+  //EVENTS
+
+  CollectionReference<Map<String, dynamic>> get eventsCollection =>
+      instance.collection('events');
+
+  Query<Map<String, dynamic>> get myEvents => eventsCollection
+      .where('customerId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
+
+  Future<DocumentReference<Map<String, dynamic>>> addEvent(Event event) =>
+      eventsCollection.add(event.toMap());
+
+  Future<void> updateEvent(Event event) =>
+      eventsCollection.doc(event.id).update(event.toMap());
+
+  Future<void> deleteEvent(String eventId) =>
+      eventsCollection.doc(eventId).delete();
 }

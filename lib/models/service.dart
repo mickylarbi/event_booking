@@ -39,6 +39,11 @@ class Service {
         'imageUrls': imageUrls ?? [],
       };
 
+  
+  String get price
+    => 'GH₵ ${leastPrice!.toStringAsFixed(2)} - ${highestPrice!.toStringAsFixed(2)}';
+  
+
   @override
   bool operator ==(other) =>
       other is Service &&

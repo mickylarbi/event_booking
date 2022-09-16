@@ -1,3 +1,4 @@
+import 'package:event_booking/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 void showLoadingDialog(BuildContext context, {String? message}) {
@@ -63,39 +64,16 @@ void showConfirmationDialog(BuildContext context,
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text(
-            'NO',
-            style: TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.bold,
-                letterSpacing: .5),
-          ),
-          style: ButtonStyle(
-            backgroundColor:
-                MaterialStateProperty.all(Colors.blue.withOpacity(.15)),
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            ),
-          ),
+          style: translucentButtonStyle,
+          child: const Text('NO'),
         ),
-        TextButton(
+        ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
             confirmFunction();
           },
-          child: const Text(
-            'YES',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                letterSpacing: .5),
-          ),
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            ),
-          ),
+          style: elevatedButtonStyle,
+          child: const Text('YES'),
         ),
       ],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -106,7 +84,6 @@ void showConfirmationDialog(BuildContext context,
 
 void showCustomBottomSheet(BuildContext context, List<Widget> children) {
   showModalBottomSheet(
-    backgroundColor: Colors.grey[50],
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
     context: context,

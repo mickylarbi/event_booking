@@ -7,7 +7,7 @@ import 'package:event_booking/firebase_services/storage_service.dart';
 import 'package:event_booking/models/service.dart';
 import 'package:event_booking/models/service_provider.dart';
 import 'package:event_booking/upload_company_screen/company_list_screen.dart';
-import 'package:event_booking/upload_company_screen/service_details_screen.dart';
+import 'package:event_booking/upload_company_screen/edit_service_screen.dart';
 import 'package:event_booking/utils/constants.dart';
 import 'package:event_booking/utils/dialogs.dart';
 import 'package:event_booking/utils/functions.dart';
@@ -320,7 +320,7 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
                           onPressed: () {
                             navigate(
                                 context,
-                                ServiceDetailsScreen(
+                                EditServiceScreen(
                                   service: Service(),
                                   providerId: widget.serviceProvider.id!,
                                 ));
@@ -384,7 +384,7 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
                             onTap: () {
                               navigate(
                                   context,
-                                  ServiceDetailsScreen(
+                                  EditServiceScreen(
                                     service: service,
                                     providerId: widget.serviceProvider.id!,
                                   ));

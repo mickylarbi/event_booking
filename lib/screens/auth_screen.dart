@@ -1,8 +1,9 @@
 import 'package:event_booking/firebase_services/auth_service.dart';
+import 'package:event_booking/screens/event_screen.dart/home_screen.dart';
 import 'package:event_booking/screens/shared/custom_buttons.dart';
 import 'package:event_booking/screens/shared/custom_text_span.dart';
 import 'package:event_booking/screens/shared/custom_textformfield.dart';
-import 'package:event_booking/screens/home_screen.dart';
+import 'package:event_booking/utils/constants.dart';
 import 'package:event_booking/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 
@@ -38,10 +39,15 @@ class _AuthScreenState extends State<AuthScreen> {
               shrinkWrap: true,
               padding: const EdgeInsets.all(36),
               children: [
-                CustomTextFormField(
+                Image.asset('assets/images/logo.png'),
+                const SizedBox(height: 20),
+                TextField(
                   controller: _emailController,
-                  hintText: 'Email',
                   keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    hintText: 'Email',
+                    hintStyle: TextStyle(color: Colors.grey),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 PasswordTextFormField(controller: _passwordController),
@@ -52,7 +58,8 @@ class _AuthScreenState extends State<AuthScreen> {
                       controller: _confirmPasswordController,
                       hintText: 'Confirm Password'),
                 const SizedBox(height: 50),
-                CustomFlatButton(
+                ElevatedButton(
+                  style: elevatedButtonStyle,
                   onPressed: () {
                     if (_emailController.text.trim().isEmpty ||
                         _passwordController.text.isEmpty ||

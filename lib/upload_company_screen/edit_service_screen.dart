@@ -11,18 +11,18 @@ import 'package:event_booking/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ServiceDetailsScreen extends StatefulWidget {
+class EditServiceScreen extends StatefulWidget {
   final Service service;
   final String providerId;
-  const ServiceDetailsScreen(
+  const EditServiceScreen(
       {Key? key, required this.service, required this.providerId})
       : super(key: key);
 
   @override
-  State<ServiceDetailsScreen> createState() => _ServiceDetailsScreenState();
+  State<EditServiceScreen> createState() => _EditServiceScreenState();
 }
 
-class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
+class _EditServiceScreenState extends State<EditServiceScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController leastPriceController = TextEditingController();
@@ -162,7 +162,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
 
                               navigate(
                                 context,
-                                ServiceDetailsScreen(
+                                EditServiceScreen(
                                   service: Service.fromFirestore(
                                       valVal.data()!, valVal.id),
                                   providerId: widget.providerId,
@@ -199,7 +199,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
 
                               navigate(
                                   context,
-                                  ServiceDetailsScreen(
+                                  EditServiceScreen(
                                     service: Service.fromFirestore(
                                         valVal.data()!, valVal.id),
                                     providerId: widget.providerId,

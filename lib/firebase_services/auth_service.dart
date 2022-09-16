@@ -1,5 +1,5 @@
 import 'package:event_booking/screens/auth_screen.dart';
-import 'package:event_booking/screens/home_screen.dart';
+import 'package:event_booking/screens/event_screen.dart/home_screen.dart';
 import 'package:event_booking/utils/dialogs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

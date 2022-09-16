@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_booking/models/service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -12,7 +12,7 @@ class Event {
   DateTime? dateTime;
   String? venueString;
   LatLng? venueGeo;
-  List<HiredService>? hiredServices;
+  List<String>? hiredServices;
 
   Event(
       {this.id,
@@ -25,30 +25,23 @@ class Event {
 
   Event.fromFirestore(Map<String, dynamic> map, String eId) {
     id = eId;
-    customerId = map['customerId'] as String?;
     title = map['title'] as String?;
-    venueString = map['venue'] as String?;
     dateTime = DateTime.fromMillisecondsSinceEpoch(
         (map['dateTime'] as Timestamp).millisecondsSinceEpoch);
     venueString = map['venueString'] as String?;
-    venueGeo = map['venueGeo'];
-    hiredServices = map['serviceProviderIds'];
-    // List<dynamic>? tempList = map['familyMedicalHistory'] as List<dynamic>?;
-    // if (tempList != null) {
-    //   serviceProviderIds = [];
-    //   for (String element in tempList) {
-    //     serviceProviderIds!.add(element);
-    //   }
-    // }
+    venueGeo = LatLng(map['venueGeo'].latitude, map['venueGeo'].longitude);
+    hiredServices = (map['hiredServices'] as List<dynamic>?)!
+        .map((e) => e.toString())
+        .toList();
   }
 
   Map<String, dynamic> toMap() => {
-        'customerId': customerId,
+        'customerId': FirebaseAuth.instance.currentUser!.uid,
         'title': title,
         'dateTime': dateTime,
         'venueString': venueString,
-        'venueGeo': venueGeo,
-        'hiredServices': hiredServices,
+        'venueGeo': GeoPoint(venueGeo!.latitude, venueGeo!.longitude),
+        'hiredServices': hiredServices ?? [],
       };
 
   @override
